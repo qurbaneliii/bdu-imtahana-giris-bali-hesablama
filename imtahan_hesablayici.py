@@ -57,7 +57,7 @@ def get_colloquium_scores():
     
     scores = []
     for i in range(1, 4):
-        score = get_valid_input(f"{i}-ci kollekvium balı (0-10): ", 0, 10)
+        score = get_valid_input(f"{i}-ci kollekvium balı (1-10): ", 1, 10)
         scores.append(score)
     
     average = sum(scores) / len(scores)
@@ -75,7 +75,7 @@ def get_seminar_scores():
     
     scores = []
     for i in range(1, count + 1):
-        score = get_valid_input(f"{i}-ci seminar balı (0-10): ", 0, 10)
+        score = get_valid_input(f"{i}-ci seminar balı (1-10): ", 1, 10)
         scores.append(score)
     
     average = sum(scores) / len(scores)
@@ -89,7 +89,7 @@ def get_independent_work_score():
     print("SƏRBƏST İŞ")
     print("="*50)
     
-    score = get_valid_input("Sərbəst iş balı (0-10): ", 0, 10)
+    score = get_valid_input("Sərbəst iş balı (1-10): ", 1, 10)
     return score
 
 def calculate_attendance(course_hours):
