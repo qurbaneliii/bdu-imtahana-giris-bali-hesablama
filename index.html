@@ -346,20 +346,7 @@
                 </div>
             </div>
 
-            <!-- Nəticə Şkalası -->
-            <div class="form-section">
-                <h3>Nəticə Şkalası</h3>
-                <div class="radio-group">
-                    <div class="radio-option">
-                        <input type="radio" id="scale50" name="resultScale" value="50" checked>
-                        <label for="scale50">50 bal</label>
-                    </div>
-                    <div class="radio-option">
-                        <input type="radio" id="scale10" name="resultScale" value="10">
-                        <label for="scale10">10 bal</label>
-                    </div>
-                </div>
-            </div>
+            
 
             <!-- Kollekvium -->
             <div class="form-section">
@@ -515,8 +502,6 @@
 
             // Dərs saatı
             const courseHours = parseInt(document.querySelector('input[name="courseHours"]:checked').value);
-            // Şkala
-            const resultScale = parseInt(document.querySelector('input[name="resultScale"]:checked').value);
             
             // Kollekvium
             const coll1 = parseInt(document.getElementById('coll1').value, 10);
@@ -553,8 +538,7 @@
             
             // Yekun (baza 30 → şkala 50)
             const baseTotal = collScore + seminarScore + attendanceScore + independentWork; // 0-30
-            const score50 = baseTotal * (50 / 30);
-            const finalDisplay = resultScale === 10 ? (score50 / 5) : score50;
+            const finalDisplay = baseTotal * (50 / 30);
             
             // Nəticələri göstərmək
             document.getElementById('resultColl').textContent = 
@@ -563,9 +547,7 @@
                 `${seminarScore.toFixed(2)} (ortalama: ${seminarAvg.toFixed(2)})`;
             document.getElementById('resultAtt').textContent = attendanceScore.toFixed(2);
             document.getElementById('resultInd').textContent = independentWork.toFixed(2);
-            document.getElementById('finalScore').textContent = resultScale === 10 
-                ? `${finalDisplay.toFixed(2)} / 10` 
-                : `${finalDisplay.toFixed(2)} / 50`;
+            document.getElementById('finalScore').textContent = `${finalDisplay.toFixed(2)} / 50`;
             
             document.getElementById('results').style.display = 'block';
             document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
