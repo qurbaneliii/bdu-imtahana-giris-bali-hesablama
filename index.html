@@ -12,8 +12,8 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -22,12 +22,12 @@
         }
 
         .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
             max-width: 600px;
             width: 100%;
-            padding: 40px;
+            padding: 36px;
             animation: fadeIn 0.5s ease-in;
         }
 
@@ -50,9 +50,9 @@
         }
 
         .header h1 {
-            color: #667eea;
-            font-size: 24px;
-            margin-bottom: 10px;
+            color: #2a5298;
+            font-size: 26px;
+            margin-bottom: 8px;
         }
 
         .header p {
@@ -94,7 +94,7 @@
         input[type="number"], select {
             width: 100%;
             padding: 12px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid #e6e8eb;
             border-radius: 8px;
             font-size: 16px;
             transition: all 0.3s;
@@ -102,8 +102,8 @@
 
         input[type="number"]:focus, select:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #2a5298;
+            box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.12);
         }
 
         .radio-group {
@@ -134,13 +134,13 @@
         }
 
         .radio-option input[type="radio"]:checked + label {
-            background: #667eea;
+            background: #2a5298;
             color: white;
-            border-color: #667eea;
+            border-color: #2a5298;
         }
 
         .radio-option label:hover {
-            border-color: #667eea;
+            border-color: #2a5298;
         }
 
         .colloquium-inputs, .seminar-inputs {
@@ -168,7 +168,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
         }
 
@@ -190,7 +190,7 @@
             display: none;
             margin-top: 30px;
             padding: 25px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #f7f9fc 0%, #e7edf7 100%);
             border-radius: 15px;
             animation: slideIn 0.5s ease-out;
         }
@@ -244,7 +244,7 @@
         }
 
         .final-score h3 {
-            color: #667eea;
+            color: #2a5298;
             font-size: 28px;
             margin-bottom: 5px;
         }
@@ -255,9 +255,9 @@
         }
 
         .error {
-            color: #e74c3c;
+            color: #e63946;
             font-size: 12px;
-            margin-top: 5px;
+            margin-top: 6px;
             display: none;
         }
 
@@ -319,6 +319,21 @@
                 </div>
             </div>
 
+            <!-- Nəticə Şkalası -->
+            <div class="form-section">
+                <h3>Nəticə Şkalası</h3>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="scale50" name="resultScale" value="50" checked>
+                        <label for="scale50">50 bal</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="scale10" name="resultScale" value="10">
+                        <label for="scale10">10 bal</label>
+                    </div>
+                </div>
+            </div>
+
             <!-- Kollekvium -->
             <div class="form-section">
                 <h3>Kollekvium Balları</h3>
@@ -342,8 +357,21 @@
             <div class="form-section">
                 <h3>Seminar Qiymətləri</h3>
                 <div class="form-group">
-                    <label>Seminar sayı</label>
-                    <input type="number" id="seminarCount" min="1" max="20" value="3" required>
+                    <label>Seminar sayı (1-10)</label>
+                    <select id="seminarCount" required>
+                        <option value="">Seçin</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3" selected>3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                    <div id="seminarError" class="error">Bütün seminar ballarını 0-10 arası, boş saxlamadan daxil edin.</div>
                 </div>
                 <div id="seminarInputsContainer"></div>
             </div>
@@ -389,7 +417,7 @@
             </div>
             <div class="final-score">
                 <h3 id="finalScore">0.00 / 50</h3>
-                <p>Yekun İmtahana Giriş Balı</p>
+                <p>Yekun Bal</p>
             </div>
             <button type="button" class="btn btn-secondary" onclick="resetForm()">🔄 Yenidən Hesabla</button>
         </div>
@@ -397,7 +425,7 @@
 
     <script>
         // Seminar inputlarını dinamik yaratmaq
-        document.getElementById('seminarCount').addEventListener('input', function() {
+        document.getElementById('seminarCount').addEventListener('change', function() {
             const count = parseInt(this.value) || 0;
             const container = document.getElementById('seminarInputsContainer');
             container.innerHTML = '';
@@ -407,21 +435,25 @@
                 div.className = 'form-group';
                 div.innerHTML = `
                     <label>${i}-ci seminar (0-10)</label>
-                    <input type="number" class="seminar-input" min="0" max="10" step="0.1" required>
+                    <input type="number" class="seminar-input" min="0" max="10" step="0.1" required placeholder="0-10">
                 `;
                 container.appendChild(div);
             }
         });
 
         // İlkin 3 seminar inputu yaratmaq
-        document.getElementById('seminarCount').dispatchEvent(new Event('input'));
+        document.getElementById('seminarCount').dispatchEvent(new Event('change'));
 
         // Form submit
         document.getElementById('calculatorForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+            const seminarError = document.getElementById('seminarError');
+            seminarError.style.display = 'none';
+
             // Dərs saatı
             const courseHours = parseInt(document.querySelector('input[name="courseHours"]:checked').value);
+            // Şkala
+            const resultScale = parseInt(document.querySelector('input[name="resultScale"]:checked').value);
             
             // Kollekvium
             const coll1 = parseFloat(document.getElementById('coll1').value);
@@ -433,10 +465,22 @@
             // Seminar
             const seminarInputs = document.querySelectorAll('.seminar-input');
             let seminarSum = 0;
-            seminarInputs.forEach(input => {
-                seminarSum += parseFloat(input.value) || 0;
-            });
-            const seminarAvg = seminarSum / seminarInputs.length;
+            let seminarCountValid = 0;
+            for (const input of seminarInputs) {
+                const val = input.value.trim();
+                if (val === '') {
+                    seminarError.style.display = 'block';
+                    return;
+                }
+                const num = parseFloat(val);
+                if (isNaN(num) || num < 0 || num > 10) {
+                    seminarError.style.display = 'block';
+                    return;
+                }
+                seminarSum += num;
+                seminarCountValid++;
+            }
+            const seminarAvg = seminarCountValid > 0 ? (seminarSum / seminarCountValid) : 0;
             const seminarScore = seminarAvg * 0.4;
             
             // Sərbəst iş
@@ -452,6 +496,9 @@
             // Yekun
             let finalScore = collScore + seminarScore + attendanceScore + independentWork;
             if (finalScore > 50) finalScore = 50;
+
+            // Şkalaya uyğun nəticəni göstərmək
+            const finalDisplay = resultScale === 10 ? (finalScore / 5) : finalScore;
             
             // Nəticələri göstərmək
             document.getElementById('resultColl').textContent = 
@@ -460,7 +507,9 @@
                 `${seminarScore.toFixed(2)} (ortalama: ${seminarAvg.toFixed(2)})`;
             document.getElementById('resultAtt').textContent = attendanceScore.toFixed(2);
             document.getElementById('resultInd').textContent = independentWork.toFixed(2);
-            document.getElementById('finalScore').textContent = `${finalScore.toFixed(2)} / 50`;
+            document.getElementById('finalScore').textContent = resultScale === 10 
+                ? `${finalDisplay.toFixed(2)} / 10` 
+                : `${finalDisplay.toFixed(2)} / 50`;
             
             document.getElementById('results').style.display = 'block';
             document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -469,7 +518,7 @@
         function resetForm() {
             document.getElementById('calculatorForm').reset();
             document.getElementById('results').style.display = 'none';
-            document.getElementById('seminarCount').dispatchEvent(new Event('input'));
+            document.getElementById('seminarCount').dispatchEvent(new Event('change'));
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
