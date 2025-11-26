@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BDU - İmtahana Giriş Balı Hesablama</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -19,6 +22,10 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+        }
+
+        body.dark {
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
         }
 
         .container {
@@ -47,6 +54,23 @@
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 3px solid #667eea;
+        }
+
+        .header .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            color: #2a5298;
+            font-weight: 600;
+            user-select: none;
         }
 
         .header h1 {
@@ -283,7 +307,10 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎓 BAKI DÖVLƏT UNİVERSİTETİ</h1>
+            <div class="toolbar">
+                <h1>🎓 BAKI DÖVLƏT UNİVERSİTETİ</h1>
+                <div class="theme-toggle" id="themeToggle">🌙 Tünd rejim</div>
+            </div>
             <p>İmtahana Giriş Balı Hesablama Sistemi</p>
         </div>
 
@@ -493,12 +520,10 @@
             if (attendanceScore < 0) attendanceScore = 0;
             if (attendanceScore > 10) attendanceScore = 10;
             
-            // Yekun
-            let finalScore = collScore + seminarScore + attendanceScore + independentWork;
-            if (finalScore > 50) finalScore = 50;
-
-            // Şkalaya uyğun nəticəni göstərmək
-            const finalDisplay = resultScale === 10 ? (finalScore / 5) : finalScore;
+            // Yekun (baza 30 → şkala 50)
+            const baseTotal = collScore + seminarScore + attendanceScore + independentWork; // 0-30
+            const score50 = baseTotal * (50 / 30);
+            const finalDisplay = resultScale === 10 ? (score50 / 5) : score50;
             
             // Nəticələri göstərmək
             document.getElementById('resultColl').textContent = 
@@ -521,6 +546,23 @@
             document.getElementById('seminarCount').dispatchEvent(new Event('change'));
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+
+        // Theme toggle with persistence
+        (function() {
+            const key = 'bdu_theme';
+            const body = document.body;
+            const toggle = document.getElementById('themeToggle');
+            const mode = localStorage.getItem(key);
+            if (mode === 'dark') {
+                body.classList.add('dark');
+                toggle.textContent = '☀️ Açıq rejim';
+            }
+            toggle.addEventListener('click', () => {
+                const isDark = body.classList.toggle('dark');
+                localStorage.setItem(key, isDark ? 'dark' : 'light');
+                toggle.textContent = isDark ? '☀️ Açıq rejim' : '🌙 Tünd rejim';
+            });
+        })();
     </script>
 </body>
 </html>

@@ -120,7 +120,7 @@ def calculate_attendance(course_hours):
     return attendance_score
 
 def display_results(colloquium_score, colloquium_avg, seminar_score, seminar_avg, 
-                   attendance_score, independent_work_score, final_score):
+                   attendance_score, independent_work_score, final_score_50):
     """Nəticələri formatlanmış şəkildə göstərmək"""
     print("\n" + "="*50)
     print("YEKUN NƏTİCƏLƏR")
@@ -130,7 +130,7 @@ def display_results(colloquium_score, colloquium_avg, seminar_score, seminar_avg
     print(f"Davamiyyət: {attendance_score:.2f}")
     print(f"Sərbəst iş: {independent_work_score:.2f}")
     print("-" * 50)
-    print(f"Yekun bal: {final_score:.2f} / 50")
+    print(f"Yekun bal: {final_score_50:.2f} / 50")
     print("=" * 50)
 
 def main():
@@ -155,16 +155,13 @@ def main():
     # 5. Davamiyyət balını hesablamaq
     attendance_score = calculate_attendance(course_hours)
     
-    # 6. Yekun balı hesablamaq
-    final_score = colloquium_score + seminar_score + attendance_score + independent_work_score
-    
-    # Maksimum 50 bal ilə məhdudlaşdırmaq
-    if final_score > 50:
-        final_score = 50
+    # 6. Yekun balı hesablamaq (baza 30 → şkala 50)
+    base_total_30 = colloquium_score + seminar_score + attendance_score + independent_work_score
+    final_score_50 = base_total_30 * (50.0 / 30.0)
     
     # 7. Nəticələri göstərmək
     display_results(colloquium_score, colloquium_avg, seminar_score, seminar_avg,
-                   attendance_score, independent_work_score, final_score)
+                   attendance_score, independent_work_score, final_score_50)
     
     # Yenidən hesablamaq istəyir?
     print("\n" + "="*50)
