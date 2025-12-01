@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Bakı Dövlət Universiteti
 İmtahana Giriş Balı Hesablama Sistemi
@@ -100,7 +98,6 @@ def calculate_attendance(course_hours):
     
     absences = get_valid_input("Qayıb sayını daxil edin: ", 0, 100, is_int=True)
     
-    # Dərs saatına görə penalty müəyyənləşdirmək
     if course_hours >= 60:
         penalty_per_absence = 0.33
     else:  # 15, 30, 45
