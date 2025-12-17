@@ -18,10 +18,11 @@
     },
     HOURS_THRESHOLD: 60,
     MAX_ATTENDANCE: 10,
-    MAX_SCORE: 50,
+    MAX_TOTAL_30: 30,    // Base scale maximum
+    MAX_TOTAL_50: 50,    // Display scale maximum
     WEIGHTS: {
-      COLLOQUIUM: 0.6,
-      SEMINAR: 0.4
+      COLLOQUIUM: 0.6,   // Max: 10 × 0.6 = 6
+      SEMINAR: 0.4       // Max: 10 × 0.4 = 4
     },
     STORAGE_KEY: 'bdu-calculator-theme'
   };
@@ -178,41 +179,59 @@
   // Score Calculator
   // ========================================
   const Calculator = {
+    /**
+     * Calculates exam entry score based on BDU rules.
+     * 
+     * Scoring breakdown (30-point base):
+     *   - Colloquium: avg × 0.6 (max 6)
+     *   - Seminar: avg × 0.4 (max 4)
+     *   - Attendance: 10 - (absences × penalty) (max 10)
+     *   - Independent work: direct score (max 10)
+     *   - Total: max 30, converted to 50-point scale
+     * 
+     * @param {Object} data - Input data
+     * @returns {Object} Calculation results
+     */
     calculate(data) {
-      // Colloquium: average * 0.6
+      // Colloquium: average of 3 scores × 0.6
       const collAvg = (data.coll1 + data.coll2 + data.coll3) / 3;
       const collScore = collAvg * CONFIG.WEIGHTS.COLLOQUIUM;
 
-      // Seminar: average * 0.4
+      // Seminar: average of all scores × 0.4
       const seminarAvg = data.seminars.length > 0 
         ? data.seminars.reduce((a, b) => a + b, 0) / data.seminars.length 
         : 0;
       const seminarScore = seminarAvg * CONFIG.WEIGHTS.SEMINAR;
 
-      // Attendance: 10 - (absences * penalty)
+      // Attendance: 10 - (absences × penalty), clamped to [0, 10]
       const penalty = data.courseHours >= CONFIG.HOURS_THRESHOLD 
         ? CONFIG.HOURS_PENALTY.HIGH 
         : CONFIG.HOURS_PENALTY.LOW;
       let attendanceScore = CONFIG.MAX_ATTENDANCE - (data.absences * penalty);
       attendanceScore = Math.max(0, Math.min(CONFIG.MAX_ATTENDANCE, attendanceScore));
 
-      // Independent work (direct score)
+      // Independent work: direct score (0-10)
       const independentScore = data.independentWork;
 
-      // Total (capped at MAX_SCORE)
-      let totalScore = collScore + seminarScore + attendanceScore + independentScore;
-      totalScore = Math.min(CONFIG.MAX_SCORE, totalScore);
+      // Calculate base total on 30-point scale
+      let total30 = collScore + seminarScore + attendanceScore + independentScore;
+      total30 = Math.min(total30, CONFIG.MAX_TOTAL_30);
 
-      // Scale conversion if needed
+      // Convert to 50-point scale
+      let total50 = total30 * (CONFIG.MAX_TOTAL_50 / CONFIG.MAX_TOTAL_30);
+      total50 = Math.min(total50, CONFIG.MAX_TOTAL_50);
+
+      // Apply display scale (50 or 10)
       const scale = data.resultScale;
-      const displayScore = scale === 10 ? totalScore / 5 : totalScore;
+      const displayScore = scale === 10 ? total50 / 5 : total50;
 
       return {
         colloquium: { average: collAvg, weighted: collScore },
         seminar: { average: seminarAvg, weighted: seminarScore },
         attendance: attendanceScore,
         independent: independentScore,
-        total: totalScore,
+        total30: total30,
+        total50: total50,
         display: displayScore,
         scale: scale
       };
