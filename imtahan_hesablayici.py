@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Bakı Dövlət Universiteti - İmtahana Giriş Balı Hesablama Sistemi
+BDU İmtahana Giriş Balı Hesablama Sistemi
 
 Bu modul BDU tələbələri üçün imtahana giriş balını hesablamaq üçün
 nəzərdə tutulmuşdur. Həm interaktiv konsol proqramı, həm də
