@@ -1,592 +1,358 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BDU - İmtahana Giriş Balı Hesablama</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        body.dark {
-            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-        }
-
-        .container {
-            background: #ffffff;
-            border-radius: 24px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
-            max-width: 600px;
-            width: 100%;
-            padding: 36px;
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 3px solid #667eea;
-        }
-
-        .header .toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .theme-toggle {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            color: #2a5298;
-            font-weight: 600;
-            user-select: none;
-        }
-
-        .header h1 {
-            color: #2a5298;
-            font-size: 26px;
-            margin-bottom: 8px;
-        }
-
-        .header p {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .form-section {
-            margin-bottom: 25px;
-        }
-
-        .form-section h3 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-        }
-
-        .form-section h3::before {
-            content: '▶';
-            color: #667eea;
-            margin-right: 10px;
-            font-size: 14px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
-            font-weight: 500;
-            font-size: 14px;
-        }
-
-        input[type="number"], select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e6e8eb;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-
-        input[type="number"]:focus, select:focus {
-            outline: none;
-            border-color: #2a5298;
-            box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.12);
-        }
-
-        .radio-group {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .radio-option {
-            position: relative;
-        }
-
-        .radio-option input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-        }
-
-        .radio-option label {
-            display: block;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-
-        .radio-option input[type="radio"]:checked + label {
-            background: #2a5298;
-            color: white;
-            border-color: #2a5298;
-        }
-
-        .radio-option label:hover {
-            border-color: #2a5298;
-        }
-
-        .colloquium-inputs, .seminar-inputs {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-
-        #seminarInputsContainer {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 10px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
-        }
-
-        .btn-secondary:hover {
-            background: #e0e0e0;
-        }
-
-        .results {
-            display: none;
-            margin-top: 30px;
-            padding: 25px;
-            background: linear-gradient(135deg, #f7f9fc 0%, #e7edf7 100%);
-            border-radius: 15px;
-            animation: slideIn 0.5s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .results h2 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 22px;
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        .result-item:last-child {
-            border-bottom: none;
-        }
-
-        .result-label {
-            color: #555;
-            font-weight: 500;
-        }
-
-        .result-value {
-            color: #333;
-            font-weight: 600;
-        }
-
-        .final-score {
-            margin-top: 20px;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            text-align: center;
-            border: 3px solid #667eea;
-        }
-
-        .final-score h3 {
-            color: #2a5298;
-            font-size: 28px;
-            margin-bottom: 5px;
-        }
-
-        .final-score p {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .error {
-            color: #e63946;
-            font-size: 12px;
-            margin-top: 6px;
-            display: none;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 25px;
-            }
-
-            .radio-group {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .colloquium-inputs, .seminar-inputs {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bakı Dövlət Universiteti tələbələri üçün imtahana giriş balı hesablama kalkulyatoru. Kollekvium, seminar, sərbəst iş və davamiyyət ballarınızı daxil edərək yekun balınızı öyrənin.">
+  <meta name="keywords" content="BDU, Bakı Dövlət Universiteti, imtahan, giriş balı, hesablama, kalkulyator, tələbə">
+  <meta name="author" content="BDU Calculator Team">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="BDU İmtahana Giriş Balı Hesablama">
+  <meta property="og:description" content="Bakı Dövlət Universiteti tələbələri üçün imtahana giriş balı hesablama sistemi.">
+  <meta property="og:url" content="https://qurbaneliii.github.io/bdu-imtahana-giris-bali-hesablama/">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+  
+  <title>BDU İmtahana Giriş Balı Hesablama | Bakı Dövlət Universiteti</title>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="toolbar">
-                <h1>🎓 BAKI DÖVLƏT UNİVERSİTETİ</h1>
-                <div class="theme-toggle" id="themeToggle">🌙 Tünd rejim</div>
-            </div>
-            <p>İmtahana Giriş Balı Hesablama Sistemi</p>
-        </div>
-
-        <form id="calculatorForm">
-            <!-- Dərs Saatı -->
-            <div class="form-section">
-                <h3>Dərs Saatı</h3>
-                <div class="radio-group">
-                    <div class="radio-option">
-                        <input type="radio" id="hours15" name="courseHours" value="15" required>
-                        <label for="hours15">15 saat</label>
-                    </div>
-                    <div class="radio-option">
-                        <input type="radio" id="hours30" name="courseHours" value="30">
-                        <label for="hours30">30 saat</label>
-                    </div>
-                    <div class="radio-option">
-                        <input type="radio" id="hours45" name="courseHours" value="45">
-                        <label for="hours45">45 saat</label>
-                    </div>
-                    <div class="radio-option">
-                        <input type="radio" id="hours60" name="courseHours" value="60">
-                        <label for="hours60">60 saat</label>
-                    </div>
-                    <div class="radio-option">
-                        <input type="radio" id="hours75" name="courseHours" value="75">
-                        <label for="hours75">75 saat</label>
-                    </div>
-                    <div class="radio-option">
-                        <input type="radio" id="hours90" name="courseHours" value="90">
-                        <label for="hours90">90 saat</label>
-                    </div>
-                </div>
-            </div>
-
-            
-
-            <!-- Kollekvium -->
-            <div class="form-section">
-                <h3>Kollekvium Balları</h3>
-                <div class="colloquium-inputs">
-                    <div class="form-group">
-                            <label>1-ci (1-10)</label>
-                        <select id="coll1" required>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8" selected>8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                            <label>2-ci (1-10)</label>
-                        <select id="coll2" required>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8" selected>8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                            <label>3-cü (1-10)</label>
-                        <select id="coll3" required>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8" selected>8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Seminar -->
-            <div class="form-section">
-                <h3>Seminar Qiymətləri</h3>
-                <div class="form-group">
-                    <label>Seminar sayı (1-10)</label>
-                    <select id="seminarCount" required>
-                        <option value="">Seçin</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3" selected>3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                    </select>
-                    <div id="seminarError" class="error">Bütün seminar ballarını 0-10 arası, boş saxlamadan daxil edin.</div>
-                </div>
-                <div id="seminarInputsContainer"></div>
-            </div>
-
-            <!-- Sərbəst İş -->
-            <div class="form-section">
-                <h3>Sərbəst İş</h3>
-                <div class="form-group">
-                        <label>Sərbəst iş balı (1-10)</label>
-                        <select id="independentWork" required>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8" selected>8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                        </select>
-                </div>
-            </div>
-
-            <!-- Davamiyyət -->
-            <div class="form-section">
-                <h3>Davamiyyət</h3>
-                <div class="form-group">
-                    <label>Qayıb sayı</label>
-                    <input type="number" id="absences" min="0" max="100" value="0" required>
-                </div>
-            </div>
-
-            <button type="submit" class="btn btn-primary">📊 Hesabla</button>
-        </form>
-
-        <div id="results" class="results">
-            <h2>📋 YEKUN NƏTİCƏLƏR</h2>
-            <div class="result-item">
-                <span class="result-label">Kollekvium balı:</span>
-                <span class="result-value" id="resultColl">-</span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">Seminar balı:</span>
-                <span class="result-value" id="resultSem">-</span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">Davamiyyət:</span>
-                <span class="result-value" id="resultAtt">-</span>
-            </div>
-            <div class="result-item">
-                <span class="result-label">Sərbəst iş:</span>
-                <span class="result-value" id="resultInd">-</span>
-            </div>
-            <div class="final-score">
-                <h3 id="finalScore">0.00 / 50</h3>
-                <p>Yekun Bal</p>
-            </div>
-            <button type="button" class="btn btn-secondary" onclick="resetForm()">🔄 Yenidən Hesabla</button>
-        </div>
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="site-header__logo">
+      <span class="site-header__icon" aria-hidden="true">🎓</span>
+      <div>
+        <h1 class="site-header__title">BAKI DÖVLƏT UNİVERSİTETİ</h1>
+        <p class="site-header__subtitle">İmtahana Giriş Balı Hesablama Sistemi</p>
+      </div>
     </div>
+    <p class="site-header__description">
+      Kollekvium, seminar, sərbəst iş və davamiyyət ballarınızı daxil edərək 
+      imtahana giriş balınızı hesablayın.
+    </p>
+    <button 
+      type="button" 
+      id="themeToggle" 
+      class="theme-toggle" 
+      aria-label="Tema rejimini dəyişdir"
+    >
+      <span class="theme-icon" aria-hidden="true">🌙</span>
+      <span class="theme-text">Tünd rejim</span>
+    </button>
+  </header>
 
-    <script>
-        // Seminar inputlarını dinamik yaratmaq
-        document.getElementById('seminarCount').addEventListener('change', function() {
-            const count = parseInt(this.value) || 0;
-            const container = document.getElementById('seminarInputsContainer');
-            container.innerHTML = '';
-                const options = Array.from({length: 10}, (_, i) => {
-                    const v = i + 1;
-                    return `<option value="${v}">${v}</option>`;
-                }).join('');
-            for (let i = 1; i <= count; i++) {
-                const div = document.createElement('div');
-                div.className = 'form-group';
-                div.innerHTML = `
-                        <label>${i}-ci seminar (1-10)</label>
-                    <select class="seminar-input" required>${options}</select>
-                `;
-                container.appendChild(div);
-            }
-        });
+  <!-- Main Content -->
+  <main class="main-content" role="main">
+    <div class="container">
+      <form id="calculatorForm" class="calculator-form" novalidate>
+        
+        <!-- Course Hours Section -->
+        <div class="card">
+          <div class="card__header">
+            <div class="card__icon" aria-hidden="true">⏱️</div>
+            <div>
+              <h2 class="card__title">Dərs Saatı</h2>
+              <p class="card__subtitle">Fənnin həftəlik dərs saatını seçin</p>
+            </div>
+          </div>
+          
+          <div class="form-section">
+            <div class="radio-group" role="radiogroup" aria-label="Dərs saatı seçimi">
+              <div class="radio-option">
+                <input type="radio" id="hours15" name="courseHours" value="15" required>
+                <label for="hours15">15 saat</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" id="hours30" name="courseHours" value="30">
+                <label for="hours30">30 saat</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" id="hours45" name="courseHours" value="45">
+                <label for="hours45">45 saat</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" id="hours60" name="courseHours" value="60" checked>
+                <label for="hours60">60 saat</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" id="hours75" name="courseHours" value="75">
+                <label for="hours75">75 saat</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" id="hours90" name="courseHours" value="90">
+                <label for="hours90">90 saat</label>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        // İlkin 3 seminar inputu yaratmaq
-        document.getElementById('seminarCount').dispatchEvent(new Event('change'));
+        <!-- Colloquium Section -->
+        <div class="card">
+          <div class="card__header">
+            <div class="card__icon" aria-hidden="true">📝</div>
+            <div>
+              <h2 class="card__title">Kollekvium Balları</h2>
+              <p class="card__subtitle">Hər üç kollekvium balını daxil edin (0-10)</p>
+            </div>
+          </div>
+          
+          <div class="form-section">
+            <p class="form-section__description">
+              Kollekvium ballarının ortalaması hesablanır və 0.6 əmsalı ilə vurulur.
+            </p>
+            <div class="form-grid form-grid--3cols">
+              <div class="form-group">
+                <label class="form-label" for="coll1">
+                  1-ci kollekvium
+                  <span class="info-tooltip" data-tooltip="Birinci kollekvium imtahanının balı" tabindex="0">?</span>
+                </label>
+                <input 
+                  type="number" 
+                  id="coll1" 
+                  class="form-input" 
+                  min="0" 
+                  max="10" 
+                  step="0.1" 
+                  placeholder="0-10"
+                  aria-label="Birinci kollekvium balı"
+                  required
+                >
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="coll2">
+                  2-ci kollekvium
+                </label>
+                <input 
+                  type="number" 
+                  id="coll2" 
+                  class="form-input" 
+                  min="0" 
+                  max="10" 
+                  step="0.1" 
+                  placeholder="0-10"
+                  aria-label="İkinci kollekvium balı"
+                  required
+                >
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="coll3">
+                  3-cü kollekvium
+                </label>
+                <input 
+                  type="number" 
+                  id="coll3" 
+                  class="form-input" 
+                  min="0" 
+                  max="10" 
+                  step="0.1" 
+                  placeholder="0-10"
+                  aria-label="Üçüncü kollekvium balı"
+                  required
+                >
+              </div>
+            </div>
+          </div>
+        </div>
 
-        // Form submit
-        document.getElementById('calculatorForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const seminarError = document.getElementById('seminarError');
-            seminarError.style.display = 'none';
+        <!-- Seminar Section -->
+        <div class="card">
+          <div class="card__header">
+            <div class="card__icon" aria-hidden="true">💬</div>
+            <div>
+              <h2 class="card__title">Seminar Qiymətləri</h2>
+              <p class="card__subtitle">Seminar sayını seçin və balları daxil edin</p>
+            </div>
+          </div>
+          
+          <div class="form-section">
+            <p class="form-section__description">
+              Seminar ballarının ortalaması hesablanır və 0.4 əmsalı ilə vurulur.
+            </p>
+            <div class="form-group mb-lg">
+              <label class="form-label" for="seminarCount">
+                Seminar sayı
+                <span class="info-tooltip" data-tooltip="Semestr ərzində keçirilən seminar sayı" tabindex="0">?</span>
+              </label>
+              <select id="seminarCount" class="form-select" aria-label="Seminar sayını seçin" required>
+                <option value="1">1 seminar</option>
+                <option value="2">2 seminar</option>
+                <option value="3" selected>3 seminar</option>
+                <option value="4">4 seminar</option>
+                <option value="5">5 seminar</option>
+                <option value="6">6 seminar</option>
+                <option value="7">7 seminar</option>
+                <option value="8">8 seminar</option>
+                <option value="9">9 seminar</option>
+                <option value="10">10 seminar</option>
+              </select>
+            </div>
+            <div id="seminarInputsContainer">
+              <!-- Dynamically generated seminar inputs -->
+            </div>
+          </div>
+        </div>
 
-            // Dərs saatı
-            const courseHours = parseInt(document.querySelector('input[name="courseHours"]:checked').value);
-            
-            // Kollekvium
-            const coll1 = parseInt(document.getElementById('coll1').value, 10);
-            const coll2 = parseInt(document.getElementById('coll2').value, 10);
-            const coll3 = parseInt(document.getElementById('coll3').value, 10);
-            const collAvg = (coll1 + coll2 + coll3) / 3;
-            const collScore = collAvg * 0.6;
-            
-            // Seminar
-            const seminarInputs = document.querySelectorAll('.seminar-input');
-            let seminarSum = 0;
-            let seminarCountValid = 0;
-            for (const input of seminarInputs) {
-                const num = parseInt(input.value, 10);
-                if (isNaN(num) || num < 1 || num > 10) {
-                    seminarError.style.display = 'block';
-                    return;
-                }
-                seminarSum += num;
-                seminarCountValid++;
-            }
-            const seminarAvg = seminarCountValid > 0 ? (seminarSum / seminarCountValid) : 0;
-            const seminarScore = seminarAvg * 0.4;
-            
-            // Sərbəst iş
-            const independentWork = parseInt(document.getElementById('independentWork').value, 10);
-            
-            // Davamiyyət
-            const absences = parseInt(document.getElementById('absences').value);
-            const penalty = courseHours >= 60 ? 0.33 : 0.5;
-            let attendanceScore = 10 - (absences * penalty);
-            if (attendanceScore < 0) attendanceScore = 0;
-            if (attendanceScore > 10) attendanceScore = 10;
-            
-            // Yekun (baza 30 → şkala 50)
-            const baseTotal = collScore + seminarScore + attendanceScore + independentWork; // 0-30
-            const finalDisplay = baseTotal * (50 / 30);
-            
-            // Nəticələri göstərmək
-            document.getElementById('resultColl').textContent = 
-                `${collScore.toFixed(2)} (ortalama: ${collAvg.toFixed(2)})`;
-            document.getElementById('resultSem').textContent = 
-                `${seminarScore.toFixed(2)} (ortalama: ${seminarAvg.toFixed(2)})`;
-            document.getElementById('resultAtt').textContent = attendanceScore.toFixed(2);
-            document.getElementById('resultInd').textContent = independentWork.toFixed(2);
-            document.getElementById('finalScore').textContent = `${finalDisplay.toFixed(2)} / 50`;
-            
-            document.getElementById('results').style.display = 'block';
-            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        });
+        <!-- Independent Work & Attendance -->
+        <div class="card">
+          <div class="card__header">
+            <div class="card__icon" aria-hidden="true">📚</div>
+            <div>
+              <h2 class="card__title">Sərbəst İş və Davamiyyət</h2>
+              <p class="card__subtitle">Əlavə ballarınızı daxil edin</p>
+            </div>
+          </div>
+          
+          <div class="form-section">
+            <div class="form-grid form-grid--2cols">
+              <div class="form-group">
+                <label class="form-label" for="independentWork">
+                  Sərbəst iş balı (0-10)
+                  <span class="info-tooltip" data-tooltip="Müstəqil tədqiqat və ya layihə işi üçün verilən bal" tabindex="0">?</span>
+                </label>
+                <input 
+                  type="number" 
+                  id="independentWork" 
+                  class="form-input" 
+                  min="0" 
+                  max="10" 
+                  step="0.1" 
+                  placeholder="0-10"
+                  aria-label="Sərbəst iş balı"
+                  required
+                >
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="absences">
+                  Qayıb sayı
+                  <span class="info-tooltip" data-tooltip="Semestr ərzində buraxılmış dərs sayı. 60+ saatlıq fənn: hər qayıb -0.33 bal; 15-45 saatlıq fənn: hər qayıb -0.5 bal" tabindex="0">?</span>
+                </label>
+                <input 
+                  type="number" 
+                  id="absences" 
+                  class="form-input" 
+                  min="0" 
+                  max="100" 
+                  step="1" 
+                  value="0"
+                  placeholder="0"
+                  aria-label="Qayıb sayı"
+                  required
+                >
+              </div>
+            </div>
+          </div>
+        </div>
 
-        function resetForm() {
-            document.getElementById('calculatorForm').reset();
-            document.getElementById('results').style.display = 'none';
-            document.getElementById('seminarCount').dispatchEvent(new Event('change'));
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        <!-- Result Scale Selection -->
+        <div class="card">
+          <div class="card__header">
+            <div class="card__icon" aria-hidden="true">📊</div>
+            <div>
+              <h2 class="card__title">Nəticə Şkalası</h2>
+              <p class="card__subtitle">Nəticənin göstərilmə formatını seçin</p>
+            </div>
+          </div>
+          
+          <div class="form-section">
+            <div class="radio-group" role="radiogroup" aria-label="Nəticə şkalası seçimi">
+              <div class="radio-option">
+                <input type="radio" id="scale50" name="resultScale" value="50" checked>
+                <label for="scale50">50 ballıq şkala</label>
+              </div>
+              <div class="radio-option">
+                <input type="radio" id="scale10" name="resultScale" value="10">
+                <label for="scale10">10 ballıq şkala</label>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        // Theme toggle with persistence
-        (function() {
-            const key = 'bdu_theme';
-            const body = document.body;
-            const toggle = document.getElementById('themeToggle');
-            const mode = localStorage.getItem(key);
-            if (mode === 'dark') {
-                body.classList.add('dark');
-                toggle.textContent = '☀️ Açıq rejim';
-            }
-            toggle.addEventListener('click', () => {
-                const isDark = body.classList.toggle('dark');
-                localStorage.setItem(key, isDark ? 'dark' : 'light');
-                toggle.textContent = isDark ? '☀️ Açıq rejim' : '🌙 Tünd rejim';
-            });
-        })();
-    </script>
+        <!-- Action Buttons -->
+        <div class="form-section text-center">
+          <button type="submit" class="btn btn--primary btn--lg">
+            <span aria-hidden="true">📊</span>
+            Hesabla
+          </button>
+          <button type="button" id="resetBtn" class="btn btn--secondary btn--lg mt-md">
+            <span aria-hidden="true">🔄</span>
+            Sıfırla
+          </button>
+        </div>
+      </form>
+
+      <!-- Results Card -->
+      <div id="resultsCard" class="card results-card hidden" aria-live="polite">
+        <div class="card__header">
+          <div class="card__icon" aria-hidden="true">✅</div>
+          <div>
+            <h2 class="card__title">Nəticələr</h2>
+            <p class="card__subtitle">Ballarınızın təfərrüatları</p>
+          </div>
+        </div>
+        
+        <ul class="results-list">
+          <li class="results-item">
+            <span class="results-item__label">
+              <span aria-hidden="true">📝</span>
+              Kollekvium balı
+            </span>
+            <span class="results-item__value" id="resultColl">—</span>
+          </li>
+          <li class="results-item">
+            <span class="results-item__label">
+              <span aria-hidden="true">💬</span>
+              Seminar balı
+            </span>
+            <span class="results-item__value" id="resultSem">—</span>
+          </li>
+          <li class="results-item">
+            <span class="results-item__label">
+              <span aria-hidden="true">📅</span>
+              Davamiyyət
+            </span>
+            <span class="results-item__value" id="resultAtt">—</span>
+          </li>
+          <li class="results-item">
+            <span class="results-item__label">
+              <span aria-hidden="true">📚</span>
+              Sərbəst iş
+            </span>
+            <span class="results-item__value" id="resultInd">—</span>
+          </li>
+        </ul>
+        
+        <div class="final-score-display">
+          <div class="final-score-display__value" id="finalScoreValue">0.00 / 50</div>
+          <div class="final-score-display__label" id="finalScoreLabel">İmtahana Giriş Balı</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <p>
+      © 2025 Bakı Dövlət Universiteti — İmtahana Giriş Balı Hesablama Sistemi
+    </p>
+    <p class="mt-sm">
+      <a href="https://github.com/qurbaneliii/bdu-imtahana-giris-bali-hesablama" target="_blank" rel="noopener noreferrer">
+        GitHub-da baxın
+      </a>
+    </p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
 </body>
 </html>
