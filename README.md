@@ -1,4 +1,4 @@
-# 🎓 BDU İmtahana Giriş Balı Kalkulyatoru
+# BDU İmtahana Giriş Balı Kalkulyatoru
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-## ✨ Xüsusiyyətlər
+## Xüsusiyyətlər
 
 | Xüsusiyyət | Web Versiya | Python CLI |
 |------------|:-----------:|:----------:|
@@ -32,13 +32,13 @@
 | Responsiv dizayn | ✅ | ❌ |
 | Modul import | ❌ | ✅ |
 
-## 🚀 Canlı Demo
+## Canlı Demo
 
 **Web Versiyası:** [https://qurbaneliii.github.io/bdu-imtahana-giris-bali-hesablama/](https://qurbaneliii.github.io/bdu-imtahana-giris-bali-hesablama/)
 
 ---
 
-## 📊 Hesablama Qaydaları
+## Hesablama Qaydaları
 
 İmtahana giriş balı **30 ballıq baza** sistemində hesablanır və **50 ballıq şkala**ya çevrilir.
 
@@ -68,7 +68,7 @@
 
 ---
 
-## 🖥️ İstifadə
+## İstifadə
 
 ### Web Versiyası
 
@@ -109,7 +109,7 @@ print(f"Kollekvium: {coll_result['weighted']:.2f}")
 
 ---
 
-## 📁 Fayl Strukturu
+## Fayl Strukturu
 
 ```
 bdu-imtahana-giris-bali-hesablama/
@@ -125,7 +125,7 @@ bdu-imtahana-giris-bali-hesablama/
 
 ---
 
-## 🛠️ Texnoloji Stek
+## Texnoloji Stek
 
 - **Frontend:** Vanilla HTML5, CSS3, JavaScript (ES6+)
 - **Backend/CLI:** Python 3.7+ (standart kitabxana)
@@ -135,7 +135,7 @@ bdu-imtahana-giris-bali-hesablama/
 
 ---
 
-## 🎨 Ekran Görüntüləri
+## Ekran Görüntüləri
 
 <details>
 <summary>İşıqlı Rejim</summary>
@@ -153,7 +153,7 @@ Göz dostu qaranlıq tema, bütün funksiyalar mövcud
 
 ---
 
-## 🧪 Nümunə Hesablama
+## Nümunə Hesablama
 
 | Giriş | Dəyər |
 |-------|-------|
@@ -178,7 +178,7 @@ Sərbəst iş: 9.00
 
 ---
 
-## 📋 Tələblər
+## Tələblər
 
 ### Web Versiyası
 - Müasir brauzer (Chrome, Firefox, Safari, Edge)
@@ -189,7 +189,7 @@ Sərbəst iş: 9.00
 
 ---
 
-## 🤝 Töhfə Vermək
+## Töhfə Vermək
 
 1. Repo-nu fork edin
 2. Yeni branch yaradın (`git checkout -b feature/yeni-xususiyyet`)
@@ -199,13 +199,13 @@ Sərbəst iş: 9.00
 
 ---
 
-## 📄 Lisenziya
+## Lisenziya
 
 Bu layihə MIT lisenziyası altında yayımlanır. Ətraflı məlumat üçün [LICENSE](LICENSE) faylına baxın.
 
 ---
 
-## 👨‍💻 Müəllif
+## Müəllif
 
 Bakı Dövlət Universiteti tələbələri üçün hazırlanmışdır.
 
